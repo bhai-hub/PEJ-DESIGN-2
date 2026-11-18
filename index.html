@@ -1,0 +1,1577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PANACEA — Haute Joaillerie</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+  
+  <!-- GSAP & ScrollTrigger Animation Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <style>
+    /* -------------------------------------------------------------
+       MINIMAL LUXURY DESIGN SYSTEM
+       ------------------------------------------------------------- */
+    :root {
+      --obsidian: #0A0B0D;
+      --onyx: #121316;
+      --card-bg: #15161A;
+      --gold: #C9A67A;
+      --champagne: #DFC498;
+      --silk: #F4EFE6;
+      --muted: rgba(244, 239, 230, 0.45);
+      --hairline: rgba(201, 166, 122, 0.18);
+      
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'Jost', -apple-system, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      background-color: var(--obsidian);
+      color: var(--silk);
+      font-family: var(--font-sans);
+      font-weight: 300;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      scroll-behavior: smooth;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      background: none;
+      border: none;
+      font-family: inherit;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* -------------------------------------------------------------
+       MINIMAL HEADER
+       ------------------------------------------------------------- */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      padding: 0 4vw;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 100;
+      background: linear-gradient(180deg, rgba(10, 11, 13, 0.9) 0%, rgba(10, 11, 13, 0) 100%);
+      transition: background 0.4s ease, border-color 0.4s ease;
+    }
+
+    .header.scrolled {
+      background: rgba(10, 11, 13, 0.94);
+      border-bottom: 1px solid var(--hairline);
+      backdrop-filter: blur(16px);
+    }
+
+    .brand-mark {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      letter-spacing: 0.32em;
+    }
+
+    .brand-name {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: 400;
+      letter-spacing: 0.35em;
+      color: var(--silk);
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+    }
+
+    .brand-sub {
+      font-size: 8px;
+      letter-spacing: 0.4em;
+      color: var(--gold);
+      opacity: 0.85;
+      margin-top: 2px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+    }
+
+    .nav-link {
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--silk);
+      opacity: 0.75;
+      transition: opacity 0.3s, color 0.3s;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+    }
+
+    .nav-link:hover {
+      opacity: 1;
+      color: var(--gold);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .bag-btn {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--champagne);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border: 1px solid var(--hairline);
+      background: rgba(10, 11, 13, 0.4);
+      backdrop-filter: blur(8px);
+      transition: all 0.3s ease;
+    }
+
+    .bag-btn:hover {
+      background: rgba(201, 166, 122, 0.15);
+      border-color: var(--gold);
+    }
+
+    /* -------------------------------------------------------------
+       HERO: FULL SCREEN IMAGE VIEWPORT WITH HIGH-CONTRAST TEXT OVERLAY
+       ------------------------------------------------------------- */
+    .hero-fullscreen-section {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      min-height: 700px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Fullscreen Image Stage (Covers Entire Viewport) */
+    .hero-fullscreen-stage {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .hero-slide-img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.04);
+      filter: brightness(0.9) contrast(1.06);
+      will-change: transform, opacity;
+    }
+
+    .hero-slide-img.back {
+      z-index: 1;
+      opacity: 1;
+    }
+
+    .hero-slide-img.front {
+      z-index: 2;
+      opacity: 1;
+    }
+
+    /* High-End Chiaroscuro Overlay for Supreme Contrast & Premium Drama */
+    .hero-luxury-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 3;
+      pointer-events: none;
+      background: 
+        radial-gradient(circle at 50% 50%, rgba(10, 11, 13, 0.28) 0%, rgba(10, 11, 13, 0.78) 100%),
+        linear-gradient(180deg, rgba(10, 11, 13, 0.75) 0%, rgba(10, 11, 13, 0.12) 35%, rgba(10, 11, 13, 0.5) 72%, rgba(10, 11, 13, 0.95) 100%);
+    }
+
+    /* Floating High-Contrast Typographic Content (Centered) */
+    .hero-overlay-content {
+      position: relative;
+      z-index: 5;
+      width: 100%;
+      max-width: 1200px;
+      padding: 0 4vw;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .hero-content-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      pointer-events: auto;
+    }
+
+    .hero-lineage-tag {
+      font-size: 10px;
+      letter-spacing: 0.42em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 14px;
+      display: block;
+      font-weight: 500;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95);
+    }
+
+    .hero-piece-title {
+      font-family: var(--font-serif);
+      font-size: clamp(44px, 6.5vw, 84px);
+      font-weight: 300;
+      letter-spacing: 0.05em;
+      color: #FFFFFF;
+      line-height: 1.08;
+      margin-bottom: 12px;
+      text-shadow: 0 4px 28px rgba(0, 0, 0, 0.95), 0 2px 6px rgba(0, 0, 0, 0.9);
+    }
+
+    .hero-piece-material {
+      font-size: 12px;
+      letter-spacing: 0.36em;
+      text-transform: uppercase;
+      color: var(--champagne);
+      opacity: 0.92;
+      font-weight: 400;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.95);
+    }
+
+    /* Bottom Actions Cluster (Anchored into Bottom of Hero Section) */
+    .hero-bottom-cluster {
+      position: absolute;
+      bottom: 44px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      z-index: 10;
+    }
+
+    .hero-acquire-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      padding: 15px 42px;
+      background: rgba(10, 11, 13, 0.62);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(201, 166, 122, 0.65);
+      color: var(--silk);
+      font-size: 11px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      font-weight: 400;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 10px 36px rgba(0, 0, 0, 0.7);
+      cursor: pointer;
+    }
+
+    .hero-acquire-btn:hover {
+      background: var(--gold);
+      color: var(--obsidian);
+      border-color: var(--gold);
+      box-shadow: 0 12px 36px rgba(201, 166, 122, 0.45);
+      gap: 20px;
+    }
+
+    .cta-arrow {
+      transition: transform 0.3s ease;
+      font-size: 13px;
+    }
+
+    .hero-acquire-btn:hover .cta-arrow {
+      transform: translateX(4px);
+    }
+
+    /* Minimalist Progress Indicators at Bottom */
+    .hero-progress-bars {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .progress-dash {
+      width: 52px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.28);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      padding: 8px 0;
+      background-clip: content-box;
+      transition: background 0.3s ease;
+    }
+
+    .progress-dash:hover {
+      background: rgba(201, 166, 122, 0.7);
+      background-clip: content-box;
+    }
+
+    .dash-fill {
+      position: absolute;
+      top: 8px;
+      left: 0;
+      height: 2px;
+      width: 0%;
+      background: var(--gold);
+    }
+
+    .progress-dash.active .dash-fill {
+      width: 100%;
+    }
+
+    .hero-scroll-cue {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1px;
+      height: 20px;
+      background: linear-gradient(180deg, var(--gold) 0%, transparent 100%);
+      opacity: 0.6;
+    }
+
+    /* -------------------------------------------------------------
+       SECTION: VISUAL LOOKBOOK DIPTYCH (ROLL-OVER IMAGERY & SCROLL PARALLAX)
+       ------------------------------------------------------------- */
+    .diptych-section {
+      padding: 100px 4vw 90px;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    .diptych-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 36px;
+    }
+
+    .diptych-card {
+      position: relative;
+      height: 720px;
+      overflow: hidden;
+      cursor: pointer;
+      background-color: var(--onyx);
+      border: 1px solid rgba(201, 166, 122, 0.12);
+    }
+
+    .diptych-img-wrap {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      background: var(--card-bg);
+    }
+
+    .diptych-img-wrap img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s ease;
+      will-change: transform, opacity;
+    }
+
+    .diptych-img-wrap .img-base {
+      z-index: 1;
+      opacity: 1;
+      filter: brightness(0.88);
+      transform: scale(1);
+    }
+
+    .diptych-img-wrap .img-rollover {
+      z-index: 2;
+      opacity: 0;
+      filter: brightness(0.92);
+      transform: scale(1.08);
+    }
+
+    /* Smooth luxury roll-over transitions */
+    .diptych-card:hover .diptych-img-wrap .img-base {
+      opacity: 0;
+      transform: scale(1.04);
+    }
+
+    .diptych-card:hover .diptych-img-wrap .img-rollover {
+      opacity: 1;
+      transform: scale(1.02);
+      filter: brightness(1);
+    }
+
+    .diptych-rollover-cue {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      padding: 6px 14px;
+      font-size: 9px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--champagne);
+      background: rgba(10, 11, 13, 0.55);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(201, 166, 122, 0.25);
+      z-index: 4;
+      opacity: 0.7;
+      transition: all 0.4s ease;
+    }
+
+    .diptych-card:hover .diptych-rollover-cue {
+      opacity: 1;
+      border-color: var(--gold);
+      background: rgba(10, 11, 13, 0.8);
+      color: #FFFFFF;
+    }
+
+    .diptych-caption {
+      position: absolute;
+      bottom: 30px;
+      left: 30px;
+      right: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .diptych-tag {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--champagne);
+    }
+
+    .diptych-name {
+      font-family: var(--font-serif);
+      font-size: 24px;
+      font-weight: 300;
+      color: var(--silk);
+      letter-spacing: 0.06em;
+    }
+
+    /* -------------------------------------------------------------
+       SECTION: VISUAL GALLERY (PURE JEWELLERY IMAGERY)
+       ------------------------------------------------------------- */
+    .gallery-section {
+      padding: 80px 4vw 140px;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    .gallery-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 48px;
+      border-bottom: 1px solid var(--hairline);
+      padding-bottom: 20px;
+    }
+
+    .gallery-heading {
+      font-family: var(--font-serif);
+      font-size: 32px;
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      color: var(--silk);
+    }
+
+    .gallery-count {
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.8;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 36px;
+    }
+
+    .jewel-item {
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .jewel-photo-frame {
+      position: relative;
+      width: 100%;
+      height: 480px;
+      overflow: hidden;
+      background-color: var(--card-bg);
+      margin-bottom: 18px;
+      border: 1px solid rgba(201, 166, 122, 0.08);
+    }
+
+    .jewel-photo-frame img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transition: opacity 0.6s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .jewel-photo-frame .photo-primary {
+      z-index: 1;
+      opacity: 1;
+    }
+
+    .jewel-photo-frame .photo-detail {
+      z-index: 2;
+      opacity: 0;
+    }
+
+    .jewel-item:hover .jewel-photo-frame .photo-primary {
+      opacity: 0;
+    }
+
+    .jewel-item:hover .jewel-photo-frame .photo-detail {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+
+    .jewel-details {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 0 4px;
+    }
+
+    .jewel-title {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      color: var(--silk);
+    }
+
+    .jewel-price {
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      color: var(--gold);
+    }
+
+    .jewel-material {
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 4px;
+      padding: 0 4px;
+    }
+
+    /* -------------------------------------------------------------
+       MINIMAL PRODUCT DETAIL MODAL
+       ------------------------------------------------------------- */
+    .pdp-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(10, 11, 13, 0.95);
+      backdrop-filter: blur(16px);
+      z-index: 500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 4vw;
+    }
+
+    .pdp-overlay.active {
+      display: flex;
+    }
+
+    .pdp-lightbox {
+      width: 100%;
+      max-width: 1200px;
+      height: 82vh;
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      border: 1px solid var(--hairline);
+      background: var(--onyx);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pdp-close-btn {
+      position: absolute;
+      top: 24px;
+      right: 28px;
+      font-size: 20px;
+      color: var(--silk);
+      opacity: 0.7;
+      z-index: 10;
+      transition: opacity 0.3s;
+    }
+
+    .pdp-close-btn:hover {
+      opacity: 1;
+      color: var(--gold);
+    }
+
+    .pdp-gallery-view {
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      height: 100%;
+      gap: 1px;
+      background: var(--hairline);
+    }
+
+    .pdp-gallery-view img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .pdp-info-panel {
+      padding: 60px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-y: auto;
+    }
+
+    .pdp-top-meta {
+      font-size: 10px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+
+    .pdp-item-title {
+      font-family: var(--font-serif);
+      font-size: 36px;
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      color: var(--silk);
+      margin-bottom: 8px;
+    }
+
+    .pdp-item-price {
+      font-size: 20px;
+      color: var(--champagne);
+      letter-spacing: 0.08em;
+      margin-bottom: 36px;
+      display: block;
+    }
+
+    .pdp-option-group {
+      margin-bottom: 28px;
+    }
+
+    .pdp-option-label {
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .metal-chips {
+      display: flex;
+      gap: 12px;
+    }
+
+    .chip-btn {
+      padding: 8px 16px;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      border: 1px solid var(--hairline);
+      color: var(--silk);
+      transition: all 0.3s ease;
+    }
+
+    .chip-btn.active {
+      border-color: var(--gold);
+      background: rgba(201, 166, 122, 0.15);
+      color: var(--champagne);
+    }
+
+    .pdp-acquire-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--gold);
+      color: var(--obsidian);
+      font-size: 11px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      font-weight: 500;
+      transition: background 0.3s ease;
+      margin-top: 20px;
+    }
+
+    .pdp-acquire-btn:hover {
+      background: var(--champagne);
+    }
+
+    /* -------------------------------------------------------------
+       SLIDE-OUT BAG DRAWER
+       ------------------------------------------------------------- */
+    .bag-drawer {
+      position: fixed;
+      top: 0;
+      right: -420px;
+      width: 400px;
+      height: 100vh;
+      background: var(--onyx);
+      border-left: 1px solid var(--hairline);
+      z-index: 600;
+      padding: 40px 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .bag-drawer.active {
+      right: 0;
+    }
+
+    .bag-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--hairline);
+      padding-bottom: 20px;
+    }
+
+    .bag-title {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      letter-spacing: 0.1em;
+      color: var(--silk);
+    }
+
+    .bag-items-list {
+      flex: 1;
+      padding: 30px 0;
+      overflow-y: auto;
+    }
+
+    .bag-item-card {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .bag-item-thumb {
+      width: 72px;
+      height: 72px;
+      background: var(--card-bg);
+      flex-shrink: 0;
+    }
+
+    .bag-item-name {
+      font-family: var(--font-serif);
+      font-size: 16px;
+      color: var(--silk);
+      margin-bottom: 4px;
+    }
+
+    .bag-item-meta {
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .bag-item-price {
+      font-size: 12px;
+      color: var(--gold);
+    }
+
+    .bag-footer {
+      border-top: 1px solid var(--hairline);
+      padding-top: 24px;
+    }
+
+    .bag-total-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--silk);
+      margin-bottom: 20px;
+    }
+
+    .checkout-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--gold);
+      color: var(--obsidian);
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    /* -------------------------------------------------------------
+       MINIMAL FOOTER
+       ------------------------------------------------------------- */
+    .footer {
+      padding: 80px 4vw 60px;
+      border-top: 1px solid var(--hairline);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .footer-brand {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      letter-spacing: 0.35em;
+      color: var(--silk);
+    }
+
+    .footer-sub {
+      font-size: 9px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 32px;
+      margin-top: 10px;
+    }
+
+    .footer-link {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color 0.3s;
+    }
+
+    .footer-link:hover {
+      color: var(--gold);
+    }
+
+    /* -------------------------------------------------------------
+       RESPONSIVE RULES
+       ------------------------------------------------------------- */
+    @media (max-width: 1024px) {
+      .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .diptych-grid {
+        grid-template-columns: 1fr;
+      }
+      .diptych-card {
+        height: 540px;
+      }
+      .pdp-lightbox {
+        grid-template-columns: 1fr;
+        height: 90vh;
+      }
+      .pdp-gallery-view {
+        grid-template-rows: 1fr;
+        grid-template-columns: 1fr 1fr;
+        height: 320px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+      .hero-piece-title {
+        font-size: 38px;
+      }
+      .gallery-grid {
+        grid-template-columns: 1fr;
+      }
+      .jewel-photo-frame {
+        height: 420px;
+      }
+      .bag-drawer {
+        width: 100vw;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Minimal Header -->
+  <header class="header" id="header">
+    <a href="#" class="brand-mark">
+      <span class="brand-name">PANACEA</span>
+      <span class="brand-sub">HAUTE JOAILLERIE</span>
+    </a>
+
+    <nav class="nav-links">
+      <a href="#gallery" class="nav-link">Pieces</a>
+      <a href="#diptych" class="nav-link">Atelier</a>
+      <a href="javascript:void(0)" onclick="openCurrentPDP()" class="nav-link">Acquire</a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="bag-btn" onclick="toggleBag()">
+        <span>Bag</span>
+        <span id="bagCount">1</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero: Full Screen Image Viewport with High-Contrast Luxury Typography Overlay -->
+  <section class="hero-fullscreen-section" id="heroSection">
+    
+    <!-- Fullscreen Image Stage (Covers Entire Viewport) -->
+    <div class="hero-fullscreen-stage" id="heroStage">
+      <!-- Back and Front images for seamless crossfade and Ken Burns drift -->
+      <img id="heroImgBack" src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&q=80&w=1800" alt="The Panakeia Band" class="hero-slide-img back">
+      <img id="heroImgFront" src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&q=80&w=1800" alt="The Panakeia Band" class="hero-slide-img front">
+      <div class="hero-luxury-overlay"></div>
+    </div>
+
+    <!-- Floating High-Contrast Typographic Content (Centered Over the Image) -->
+    <div class="hero-overlay-content" id="heroOverlayContent">
+      <div class="hero-content-box" id="heroContentBox">
+        <span class="hero-lineage-tag" id="heroTag">HAUTE JOAILLERIE</span>
+        <h1 class="hero-piece-title" id="heroTitle">The Panakeia Band</h1>
+        <p class="hero-piece-material" id="heroMaterial">18K Solid Gold</p>
+      </div>
+    </div>
+
+    <!-- Bottom Actions Cluster: CTA Button & Progress Indicators Anchored at Bottom -->
+    <div class="hero-bottom-cluster" id="heroBottomCluster">
+      <button class="hero-acquire-btn" id="heroCta" onclick="openCurrentPDP()">
+        <span>Acquire Piece</span>
+        <span class="cta-arrow">→</span>
+      </button>
+
+      <!-- Minimal Auto-play Progress Indicators (No numbers) -->
+      <div class="hero-progress-bars">
+        <div class="progress-dash active" id="pDash0" onclick="goToSlide(0)">
+          <div class="dash-fill" id="pFill0"></div>
+        </div>
+        <div class="progress-dash" id="pDash1" onclick="goToSlide(1)">
+          <div class="dash-fill" id="pFill1"></div>
+        </div>
+        <div class="progress-dash" id="pDash2" onclick="goToSlide(2)">
+          <div class="dash-fill" id="pFill2"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ambient Scroll Cue -->
+    <div class="hero-scroll-cue"></div>
+
+  </section>
+
+  <!-- Visual Lookbook Diptych with Roll-Over Imagery -->
+  <section class="diptych-section" id="diptych">
+    <div class="diptych-grid">
+      <!-- Card 1: Bench Craftsmanship to Fine Solitaire Macro -->
+      <div class="diptych-card" onclick="openPDP('atelier-craft')">
+        <div class="diptych-rollover-cue">Roll Over to Inspect</div>
+        <div class="diptych-img-wrap">
+          <img class="img-base" src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&q=80&w=1200" alt="Atelier Goldsmithing Bench">
+          <img class="img-rollover" src="https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&q=80&w=1200" alt="Hand-Forged Gold Macro Detail">
+        </div>
+        <div class="diptych-caption">
+          <span class="diptych-tag">Atelier Benchwork</span>
+          <span class="diptych-name">Plate I · Solid Gold Benchwork</span>
+        </div>
+      </div>
+
+      <!-- Card 2: Obsidian Gold to Chiseled Monogram Seal Macro -->
+      <div class="diptych-card" onclick="openPDP('apollo')">
+        <div class="diptych-rollover-cue">Roll Over to Inspect</div>
+        <div class="diptych-img-wrap">
+          <img class="img-base" src="https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?auto=format&fit=crop&q=80&w=1200" alt="18k Solid Gold on Obsidian Slate">
+          <img class="img-rollover" src="https://images.unsplash.com/photo-1603561591411-07134e71a2a9?auto=format&fit=crop&q=80&w=1200" alt="Intaglio Seal Monogram Macro">
+        </div>
+        <div class="diptych-caption">
+          <span class="diptych-tag">Raw Metallurgy</span>
+          <span class="diptych-name">Plate II · Obsidian & Chiseled Gold</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Visual Gallery: Pure Jewellery -->
+  <section class="gallery-section" id="gallery">
+    <div class="gallery-top-bar">
+      <h2 class="gallery-heading">The Collection</h2>
+      <span class="gallery-count">06 Iconic Pieces</span>
+    </div>
+
+    <div class="gallery-grid">
+      
+      <!-- Piece 1: Panakeia Band -->
+      <div class="jewel-item" onclick="openPDP('panakeia')">
+        <div class="jewel-photo-frame">
+          <img class="photo-primary" src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&q=80&w=800" alt="Panakeia Band">
+          <img class="photo-detail" src="https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&q=80&w=800" alt="Panakeia Profile">
+        </div>
+        <div class="jewel-details">
+          <h3 class="jewel-title">The Panakeia Band</h3>
+          <span class="jewel-price">₹ 1,24,000</span>
+        </div>
+        <span class="jewel-material">18K Solid Gold</span>
+      </div>
+
+      <!-- Piece 2: Apollo Signet -->
+      <div class="jewel-item" onclick="openPDP('apollo')">
+        <div class="jewel-photo-frame">
+          <img class="photo-primary" src="https://images.unsplash.com/photo-1603561591411-07134e71a2a9?auto=format&fit=crop&q=80&w=800" alt="Apollo Signet">
+          <img class="photo-detail" src="https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?auto=format&fit=crop&q=80&w=800" alt="Apollo Detail">
+        </div>
+        <div class="jewel-details">
+          <h3 class="jewel-title">Apollo Sol Signet</h3>
+          <span class="jewel-price">₹ 1,86,000</span>
+        </div>
+        <span class="jewel-material">18K Solid Gold & Onyx</span>
+      </div>
+
+      <!-- Piece 3: Asclepius Cuff -->
+      <div class="jewel-item" onclick="openPDP('asclepius')">
+        <div class="jewel-photo-frame">
+          <img class="photo-primary" src="https://images.unsplash.com/photo-1602751584552-8ba73aad10e1?auto=format&fit=crop&q=80&w=800" alt="Asclepius Cuff">
+          <img class="photo-detail" src="https://images.unsplash.com/photo-1602173574767-37ac01994b2a?auto=format&fit=crop&q=80&w=800" alt="Asclepius Profile">
+        </div>
+        <div class="jewel-details">
+          <h3 class="jewel-title">Asclepius Cuff</h3>
+          <span class="jewel-price">₹ 2,42,000</span>
+        </div>
+        <span class="jewel-material">950 Pure Platinum & 18K Gold</span>
+      </div>
+
+      <!-- Piece 4: Oath Ingot Pendant -->
+      <div class="jewel-item" onclick="openPDP('oath-pendant')">
+        <div class="jewel-photo-frame">
+          <img class="photo-primary" src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=800" alt="Oath Pendant">
+          <img class="photo-detail" src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=800" alt="Pendant Detail">
+        </div>
+        <div class="jewel-details">
+          <h3 class="jewel-title">Oath Ingot Pendant</h3>
+          <span class="jewel-price">₹ 94,000</span>
+        </div>
+        <span class="jewel-material">18K Solid Yellow Gold</span>
+      </div>
+
+      <!-- Piece 5: Fellowship Surgeon Band -->
+      <div class="jewel-item" onclick="openPDP('fellowship-band')">
+        <div class="jewel-photo-frame">
+          <img class="photo-primary" src="https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&q=80&w=800" alt="Fellowship Band">
+          <img class="photo-detail" src="https://images.unsplash.com/photo-1598560917505-59a3ad559071?auto=format&fit=crop&q=80&w=800" alt="Band Edge Detail">
+        </div>
+        <div class="jewel-details">
+          <h3 class="jewel-title">Fellowship Surgeon Band</h3>
+          <span class="jewel-price">₹ 1,52,000</span>
+        </div>
+        <span class="jewel-material">18K Beveled Solid Gold</span>
+      </div>
+
+      <!-- Piece 6: Caduceus Emblem Pin -->
+      <div class="jewel-item" onclick="openPDP('caduceus-pin')">
+        <div class="jewel-photo-frame">
+          <img class="photo-primary" src="https://images.unsplash.com/photo-1600003014755-ba31aa59c4b6?auto=format&fit=crop&q=80&w=800" alt="Caduceus Pin">
+          <img class="photo-detail" src="https://images.unsplash.com/photo-1573408301185-9146fe634ad0?auto=format&fit=crop&q=80&w=800" alt="Clasp Detail">
+        </div>
+        <div class="jewel-details">
+          <h3 class="jewel-title">Caduceus Lapel Pin</h3>
+          <span class="jewel-price">₹ 68,000</span>
+        </div>
+        <span class="jewel-material">18K Solid Gold & Diamond Accent</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Minimal PDP Lightbox Modal -->
+  <div class="pdp-overlay" id="pdpModal">
+    <div class="pdp-lightbox">
+      <button class="pdp-close-btn" onclick="closePDP()">✕</button>
+      
+      <div class="pdp-gallery-view">
+        <img id="pdpImg1" src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&q=80&w=1200" alt="Studio Photo">
+        <img id="pdpImg2" src="https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&q=80&w=1200" alt="Macro Detail">
+      </div>
+
+      <div class="pdp-info-panel">
+        <div>
+          <span class="pdp-top-meta" id="pdpCategory">PANACEA · HAUTE JOAILLERIE</span>
+          <h2 class="pdp-item-title" id="pdpTitle">The Panakeia Band</h2>
+          <span class="pdp-item-price" id="pdpPrice">₹ 1,24,000</span>
+
+          <div class="pdp-option-group">
+            <span class="pdp-option-label">Precious Metal</span>
+            <div class="metal-chips">
+              <button class="chip-btn active" onclick="selectChip(this)">18K Yellow Gold</button>
+              <button class="chip-btn" onclick="selectChip(this)">18K Rose Gold</button>
+              <button class="chip-btn" onclick="selectChip(this)">950 Platinum</button>
+            </div>
+          </div>
+
+          <div class="pdp-option-group">
+            <span class="pdp-option-label">Size</span>
+            <div class="metal-chips">
+              <button class="chip-btn" onclick="selectChip(this)">6</button>
+              <button class="chip-btn active" onclick="selectChip(this)">7</button>
+              <button class="chip-btn" onclick="selectChip(this)">8</button>
+              <button class="chip-btn" onclick="selectChip(this)">9</button>
+            </div>
+          </div>
+        </div>
+
+        <button class="pdp-acquire-btn" onclick="addToBag()">Acquire Piece</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Minimal Slide-Out Bag -->
+  <div class="bag-drawer" id="bagDrawer">
+    <div class="bag-header">
+      <h3 class="bag-title">Shopping Bag</h3>
+      <button onclick="toggleBag()" style="color:var(--silk); font-size:18px;">✕</button>
+    </div>
+
+    <div class="bag-items-list" id="bagItems">
+      <div class="bag-item-card">
+        <div class="bag-item-thumb">
+          <img id="bagThumb" src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&q=80&w=200" alt="Item">
+        </div>
+        <div>
+          <h4 class="bag-item-name" id="bagItemName">The Panakeia Band</h4>
+          <p class="bag-item-meta" id="bagItemMeta">18K Yellow Gold · Size 7</p>
+          <span class="bag-item-price" id="bagItemPrice">₹ 1,24,000</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bag-footer">
+      <div class="bag-total-row">
+        <span>Total</span>
+        <span id="bagTotal">₹ 1,24,000</span>
+      </div>
+      <button class="checkout-btn" onclick="alert('Proceeding to Private Atelier Checkout.')">Checkout</button>
+    </div>
+  </div>
+
+  <!-- Minimal Footer -->
+  <footer class="footer">
+    <div class="footer-brand">PANACEA</div>
+    <div class="footer-sub">Haute Joaillerie · Flagship Atelier</div>
+    <div class="footer-links">
+      <a href="#gallery" class="footer-link">Creations</a>
+      <a href="#diptych" class="footer-link">Atelier</a>
+      <a href="mailto:concierge@panacea-jewellery.com" class="footer-link">Private Concierge</a>
+    </div>
+  </footer>
+
+  <script>
+    // Register GSAP plugins
+    gsap.registerPlugin(ScrollTrigger);
+
+    // -------------------------------------------------------------
+    // HERO AUTOPLAY SLIDESHOW & DATA (NO PRICING, NO NUMBERS)
+    // -------------------------------------------------------------
+    const heroSlides = [
+      {
+        tag: "HAUTE JOAILLERIE",
+        title: "The Panakeia Band",
+        material: "18K Solid Gold",
+        img: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&q=80&w=1800",
+        pdpKey: "panakeia"
+      },
+      {
+        tag: "SOLAR LINEAGE",
+        title: "Apollo Sol Signet",
+        material: "18K Solid Gold & Onyx",
+        img: "https://images.unsplash.com/photo-1603561591411-07134e71a2a9?auto=format&fit=crop&q=80&w=1800",
+        pdpKey: "apollo"
+      },
+      {
+        tag: "SURGICAL LINEAGE",
+        title: "Asclepius Cuff",
+        material: "950 Pure Platinum & 18K Gold",
+        img: "https://images.unsplash.com/photo-1602751584552-8ba73aad10e1?auto=format&fit=crop&q=80&w=1800",
+        pdpKey: "asclepius"
+      }
+    ];
+
+    let currentSlide = 0;
+    let isTransitioning = false;
+    let autoPlayTimer = null;
+    const SLIDE_DURATION = 4600; // ms per slide
+
+    const heroImgFront = document.getElementById('heroImgFront');
+    const heroImgBack = document.getElementById('heroImgBack');
+    const heroTag = document.getElementById('heroTag');
+    const heroTitle = document.getElementById('heroTitle');
+    const heroMaterial = document.getElementById('heroMaterial');
+    const heroContentBox = document.getElementById('heroContentBox');
+
+    function updateProgressIndicators(index) {
+      for (let i = 0; i < heroSlides.length; i++) {
+        const dash = document.getElementById(`pDash${i}`);
+        const fill = document.getElementById(`pFill${i}`);
+        if (!dash || !fill) continue;
+
+        gsap.killTweensOf(fill);
+        if (i < index) {
+          dash.classList.remove('active');
+          gsap.set(fill, { width: '100%' });
+        } else if (i === index) {
+          dash.classList.add('active');
+          gsap.fromTo(fill, { width: '0%' }, { width: '100%', duration: SLIDE_DURATION / 1000, ease: 'linear' });
+        } else {
+          dash.classList.remove('active');
+          gsap.set(fill, { width: '0%' });
+        }
+      }
+    }
+
+    function goToSlide(targetIndex) {
+      if (isTransitioning || targetIndex === currentSlide) return;
+      isTransitioning = true;
+      currentSlide = targetIndex;
+
+      const nextData = heroSlides[targetIndex];
+
+      // Update back image source
+      heroImgBack.src = nextData.img;
+      gsap.set(heroImgBack, { opacity: 1, scale: 1.06 });
+
+      // Animate front image out with subtle zoom & crossfade
+      gsap.to(heroImgFront, {
+        opacity: 0,
+        scale: 1,
+        duration: 1.2,
+        ease: 'power2.inOut',
+        onComplete: () => {
+          heroImgFront.src = nextData.img;
+          gsap.set(heroImgFront, { opacity: 1, scale: 1.04 });
+          isTransitioning = false;
+        }
+      });
+
+      // Animate high-contrast text overlay smoothly
+      gsap.to(heroContentBox, {
+        opacity: 0,
+        y: -12,
+        duration: 0.35,
+        ease: 'power2.in',
+        onComplete: () => {
+          heroTag.textContent = nextData.tag;
+          heroTitle.textContent = nextData.title;
+          heroMaterial.textContent = nextData.material;
+          gsap.to(heroContentBox, {
+            opacity: 1,
+            y: 0,
+            duration: 0.55,
+            ease: 'power2.out'
+          });
+        }
+      });
+
+      updateProgressIndicators(targetIndex);
+      restartAutoPlay();
+    }
+
+    function nextSlide() {
+      const nextIdx = (currentSlide + 1) % heroSlides.length;
+      goToSlide(nextIdx);
+    }
+
+    function startAutoPlay() {
+      stopAutoPlay();
+      updateProgressIndicators(currentSlide);
+      autoPlayTimer = setInterval(nextSlide, SLIDE_DURATION);
+    }
+
+    function stopAutoPlay() {
+      if (autoPlayTimer) clearInterval(autoPlayTimer);
+    }
+
+    function restartAutoPlay() {
+      stopAutoPlay();
+      autoPlayTimer = setInterval(nextSlide, SLIDE_DURATION);
+    }
+
+    // Pause on hover
+    const heroSection = document.getElementById('heroSection');
+    heroSection.addEventListener('mouseenter', () => {
+      stopAutoPlay();
+      const fill = document.getElementById(`pFill${currentSlide}`);
+      if (fill) gsap.getTweensOf(fill).forEach(t => t.pause());
+    });
+    heroSection.addEventListener('mouseleave', () => {
+      const fill = document.getElementById(`pFill${currentSlide}`);
+      if (fill) gsap.getTweensOf(fill).forEach(t => t.resume());
+      restartAutoPlay();
+    });
+
+    function openCurrentPDP() {
+      openPDP(heroSlides[currentSlide].pdpKey);
+    }
+
+    // -------------------------------------------------------------
+    // SCROLL ANIMATIONS (GSAP ScrollTrigger)
+    // -------------------------------------------------------------
+    function initScrollAnimations() {
+      // 1. Fullscreen Hero Image Parallax on scroll
+      gsap.to('#heroStage', {
+        scrollTrigger: {
+          trigger: '#heroSection',
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true
+        },
+        y: 80,
+        scale: 1.08,
+        ease: 'none'
+      });
+
+      // 2. Hero Text Overlay & Bottom Cluster fade-out as you scroll down
+      gsap.to(['#heroOverlayContent', '#heroBottomCluster'], {
+        scrollTrigger: {
+          trigger: '#heroSection',
+          start: 'top top',
+          end: '45% top',
+          scrub: true
+        },
+        opacity: 0,
+        y: -30,
+        ease: 'none'
+      });
+
+      // 3. Diptych editorial cards reveal on scroll
+      gsap.utils.toArray('.diptych-card').forEach((card, index) => {
+        gsap.from(card, {
+          scrollTrigger: {
+            trigger: card,
+            start: 'top 85%',
+            toggleActions: 'play none none reverse'
+          },
+          opacity: 0,
+          y: 60,
+          duration: 1.2,
+          delay: index * 0.15,
+          ease: 'power3.out'
+        });
+
+        // Parallax image movement within each diptych card
+        const imgs = card.querySelectorAll('.diptych-img-wrap img');
+        if (imgs.length > 0) {
+          gsap.to(imgs, {
+            scrollTrigger: {
+              trigger: card,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: 1.5
+            },
+            y: -30,
+            ease: 'none'
+          });
+        }
+      });
+
+      // 4. Collection Gallery header reveal
+      gsap.from('.gallery-top-bar', {
+        scrollTrigger: {
+          trigger: '.gallery-section',
+          start: 'top 82%',
+          toggleActions: 'play none none reverse'
+        },
+        opacity: 0,
+        y: 35,
+        duration: 1,
+        ease: 'power2.out'
+      });
+
+      // 5. Collection Gallery items staggered reveal
+      gsap.utils.toArray('.jewel-item').forEach((item, i) => {
+        gsap.from(item, {
+          scrollTrigger: {
+            trigger: item,
+            start: 'top 88%',
+            toggleActions: 'play none none reverse'
+          },
+          opacity: 0,
+          y: 45,
+          duration: 1.1,
+          delay: (i % 3) * 0.12,
+          ease: 'power3.out'
+        });
+      });
+
+      // 6. Header background blur on scroll
+      ScrollTrigger.create({
+        start: 'top -40',
+        onUpdate: (self) => {
+          const header = document.getElementById('header');
+          if (self.direction === 1 || window.scrollY > 40) {
+            header.classList.add('scrolled');
+          } else {
+            header.classList.remove('scrolled');
+          }
+        }
+      });
+    }
+
+    // Product Database for PDP
+    const pdpDb = {
+      'panakeia': {
+        title: 'The Panakeia Band',
+        price: '₹ 1,24,000',
+        cat: 'PANACEA · SIGNATURE',
+        img1: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&q=80&w=1200',
+        img2: 'https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&q=80&w=1200'
+      },
+      'apollo': {
+        title: 'Apollo Sol Signet',
+        price: '₹ 1,86,000',
+        cat: 'APOLLO · SOLAR LINEAGE',
+        img1: 'https://images.unsplash.com/photo-1603561591411-07134e71a2a9?auto=format&fit=crop&q=80&w=1200',
+        img2: 'https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?auto=format&fit=crop&q=80&w=1200'
+      },
+      'asclepius': {
+        title: 'Asclepius Cuff',
+        price: '₹ 2,42,000',
+        cat: 'ASCLEPIUS · PLATINUM LINE',
+        img1: 'https://images.unsplash.com/photo-1602751584552-8ba73aad10e1?auto=format&fit=crop&q=80&w=1200',
+        img2: 'https://images.unsplash.com/photo-1602173574767-37ac01994b2a?auto=format&fit=crop&q=80&w=1200'
+      },
+      'oath-pendant': {
+        title: 'Oath Ingot Pendant',
+        price: '₹ 94,000',
+        cat: 'HERITAGE · INGOT',
+        img1: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=1200',
+        img2: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=1200'
+      },
+      'fellowship-band': {
+        title: 'Fellowship Surgeon Band',
+        price: '₹ 1,52,000',
+        cat: 'PRECISION · SOLID GOLD',
+        img1: 'https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&q=80&w=1200',
+        img2: 'https://images.unsplash.com/photo-1598560917505-59a3ad559071?auto=format&fit=crop&q=80&w=1200'
+      },
+      'caduceus-pin': {
+        title: 'Caduceus Lapel Pin',
+        price: '₹ 68,000',
+        cat: 'EMBLEMS · 18K GOLD',
+        img1: 'https://images.unsplash.com/photo-1600003014755-ba31aa59c4b6?auto=format&fit=crop&q=80&w=1200',
+        img2: 'https://images.unsplash.com/photo-1573408301185-9146fe634ad0?auto=format&fit=crop&q=80&w=1200'
+      },
+      'atelier-craft': {
+        title: 'Bespoke Atelier Commission',
+        price: '₹ 3,50,000',
+        cat: 'ONE-OF-ONE · ATELIER',
+        img1: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&q=80&w=1200',
+        img2: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&q=80&w=1200'
+      }
+    };
+
+    let activeProductKey = 'panakeia';
+
+    function openPDP(key) {
+      const data = pdpDb[key] || pdpDb['panakeia'];
+      activeProductKey = key;
+
+      document.getElementById('pdpTitle').textContent = data.title;
+      document.getElementById('pdpPrice').textContent = data.price;
+      document.getElementById('pdpCategory').textContent = data.cat;
+      document.getElementById('pdpImg1').src = data.img1;
+      document.getElementById('pdpImg2').src = data.img2;
+
+      document.getElementById('pdpModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePDP() {
+      document.getElementById('pdpModal').classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+
+    function selectChip(btn) {
+      const group = btn.parentElement;
+      group.querySelectorAll('.chip-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    // Bag controls
+    function toggleBag() {
+      document.getElementById('bagDrawer').classList.toggle('active');
+    }
+
+    function addToBag() {
+      const data = pdpDb[activeProductKey];
+      document.getElementById('bagItemName').textContent = data.title;
+      document.getElementById('bagItemPrice').textContent = data.price;
+      document.getElementById('bagTotal').textContent = data.price;
+      document.getElementById('bagThumb').src = data.img1;
+      closePDP();
+      toggleBag();
+    }
+
+    // Initialize on load
+    window.addEventListener('DOMContentLoaded', () => {
+      startAutoPlay();
+      initScrollAnimations();
+    });
+  </script>
+</body>
+</html>
